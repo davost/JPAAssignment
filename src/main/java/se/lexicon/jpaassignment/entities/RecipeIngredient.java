@@ -5,76 +5,52 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.id.UUIDGenerationStrategy;
 import org.hibernate.id.UUIDGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
-
+@Entity
 public class RecipeIngredient {
-    //BAELDUNG SAYS USE uuid DATA TYPE, NOT STRING
-    // @GeneratedValue(strategy = UUIDGenerator.UUID_GEN_STRATEGY)
-    //@GeneratedValue(UUIDGenerator = UUIDGenerationStrategy)
-    //@GeneratedValue.UUIDGenerator
-    /*Now we'll look at the UUIDGenerator, which was introduced in Hibernate 5.
-     In order to use this feature, we just need to declare an id of type UUID with @GeneratedValue annotation:
-        @Entity
-        public class Course {
-        @Id
-        @GeneratedValue
-        private UUID courseId;*/
-   /* @Id
+    @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(name = "id", updatable = false, nullable = false)*/
+    @Column(name = "id", updatable = false, nullable = false)
     private String id;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "recipe_id")
     private Recipe recipe;
-    private double Measurement;
+    //todo: I don't understand why this needs a relationship here. I would think it needs to be in the recipe class?!?!?
+
+    @Column(nullable = false)
+    private Measurement measurement;
+
+    @Column(nullable = false)
+    private double amount;
+
 
     public RecipeIngredient() {
     }
 
-    public RecipeIngredient(String id, Ingredient ingredient, Recipe recipe, double measurement) {
+    public RecipeIngredient(String id, Ingredient ingredient, Recipe recipe, Measurement measurement, double amount) {
         this.id = id;
         this.ingredient = ingredient;
         this.recipe = recipe;
-        Measurement = measurement;
+        this.measurement = measurement;
+        this.amount = amount;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Ingredient getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(Ingredient ingredient) {
+    public RecipeIngredient(Ingredient ingredient, Recipe recipe, Measurement measurement, double amount) {
         this.ingredient = ingredient;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
-    }
-
-    public double getMeasurement() {
-        return Measurement;
-    }
-
-    public void setMeasurement(double measurement) {
-        Measurement = measurement;
+        this.measurement = measurement;
+        this.amount = amount;
     }
 
     @Override
@@ -82,11 +58,25 @@ public class RecipeIngredient {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecipeIngredient that = (RecipeIngredient) o;
-        return Double.compare(that.Measurement, Measurement) == 0 && id.equals(that.id) && ingredient.equals(that.ingredient) && recipe.equals(that.recipe);
+        return Double.compare(that.amount, amount) == 0 && id.equals(that.id) && ingredient.equals(that.ingredient) && recipe.equals(that.recipe) && measurement == that.measurement;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ingredient, recipe, Measurement);
+        return Objects.hash(id, ingredient, recipe, measurement, amount);
+    }
+
+    @Override
+    public String toString() {
+        return "RecipeIngredient{" +
+                "id='" + id + '\'' +
+                ", ingredient=" + ingredient +
+                ", recipe=" + recipe +
+                ", measurement=" + measurement +
+                ", amount=" + amount +
+                '}';
     }
 }
+
+
+

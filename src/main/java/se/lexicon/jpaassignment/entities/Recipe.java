@@ -1,52 +1,57 @@
 package se.lexicon.jpaassignment.entities;
 
-import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Collection;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
+
+@Entity
 public class Recipe {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String recipeName;
-    private Collection<Ingredient> ingredients;
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "recipe")
+    private List<RecipeIngredient> recipeIngredients;
+
+    @OneToOne
+    @JoinColumn(name = "recipeInstruction_id")
     private RecipeInstruction recipeInstruction;
-    private Collection<RecipeCategory> recipeCategories;
-    
+    //todo: naming convention (followed IDE suggestion)
+
+    @ManyToMany(mappedBy = "recipes")
+    private Set<RecipeCategory> recipeCategories;
+    //todo: why are students using "set" instead of "list"??? why error??
+
     public Recipe() {
     }
 
-    public Recipe(int id, String recipeName) {
+    public Recipe(int id, String recipeName, List<RecipeIngredient> recipeIngredients, RecipeInstruction recipeInstruction, Set<RecipeCategory> recipeCategories) {
         this.id = id;
         this.recipeName = recipeName;
-    }
-
-    public RecipeInstruction getRecipeInstruction() {
-        return recipeInstruction;
-    }
-
-    public void setRecipeInstruction(RecipeInstruction recipeInstruction) {
+        this.recipeIngredients = recipeIngredients;
         this.recipeInstruction = recipeInstruction;
-    }
-
-    public Collection<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(Collection<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public Collection<RecipeCategory> getRecipeCategories() {
-        return recipeCategories;
-    }
-
-    public void setRecipeCategories(Collection<RecipeCategory> recipeCategories) {
         this.recipeCategories = recipeCategories;
+    }
+
+    public Recipe(String recipeName, List<RecipeIngredient> recipeIngredients, RecipeInstruction recipeInstruction, Set<RecipeCategory> recipeCategories) {
+        this.recipeName = recipeName;
+        this.recipeIngredients = recipeIngredients;
+        this.recipeInstruction = recipeInstruction;
+        this.recipeCategories = recipeCategories;
+    }
+
+    public void addRecipeCategory(RecipeCategory recipeCategory) {
+        recipeCategories.add(recipeCategory);
+        recipeCategory.getRecipes().add(this);
+    }
+    public void removeRecipeCategory(RecipeCategory recipeCategory) {
+        recipeCategory.getRecipes().remove(this);
+        recipeCategories.remove(recipeCategory);
     }
 
     public int getId() {
@@ -65,7 +70,29 @@ public class Recipe {
         this.recipeName = recipeName;
     }
 
-    //Todo: add convenience methods for lists
+    public List<RecipeIngredient> getRecipeIngredients() {
+        return recipeIngredients;
+    }
+
+    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
+    }
+
+    public RecipeInstruction getRecipeInstruction() {
+        return recipeInstruction;
+    }
+
+    public void setRecipeInstruction(RecipeInstruction recipeInstruction) {
+        this.recipeInstruction = recipeInstruction;
+    }
+
+    public Set<RecipeCategory> getRecipeCategories() {
+        return recipeCategories;
+    }
+
+    public void setRecipeCategories(Set<RecipeCategory> recipeCategories) {
+        this.recipeCategories = recipeCategories;
+    }
 
     @Override
     public boolean equals(Object o) {

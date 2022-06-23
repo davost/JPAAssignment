@@ -1,29 +1,39 @@
 package se.lexicon.jpaassignment.entities;
 
-
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
 public class Ingredient {
-// todo: define all java models with setters getters and ctors + equal and hash code methods
-// todo: then start to map java models with database tables through the Entity annotation
-// todo: then start to define the relationship between them
 
-    private int id;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private String id;
+
+    @Column(nullable = false)
     private String ingredientName;
 
     public Ingredient() {
     }
 
-    public Ingredient(int id, String ingredientName) {
+    public Ingredient(String id, String ingredientName) {
         this.id = id;
         this.ingredientName = ingredientName;
     }
 
-    public int getId() {
+    public Ingredient(String ingredientName) {
+        this.ingredientName = ingredientName;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -32,30 +42,6 @@ public class Ingredient {
     }
 
     public void setIngredientName(String ingredientName) {
-        if (getIngredientName().equalsIgnoreCase(ingredientName)) {
-            throw new IllegalArgumentException("Ingredient name already taken"); } else {
-            this.ingredientName = ingredientName;
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ingredient that = (Ingredient) o;
-        return id == that.id && ingredientName.equals(that.ingredientName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, ingredientName);
-    }
-
-    @Override
-    public String toString() {
-        return "Ingredient{" +
-                "id=" + id +
-                ", ingredientName='" + ingredientName + '\'' +
-                '}';
+        this.ingredientName = ingredientName;
     }
 }
