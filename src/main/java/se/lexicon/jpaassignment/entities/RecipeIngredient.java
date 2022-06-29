@@ -38,18 +38,60 @@ public class RecipeIngredient {
     public RecipeIngredient() {
     }
 
-    public RecipeIngredient(String id, Ingredient ingredient, Recipe recipe, Measurement measurement, double amount) {
+    public RecipeIngredient(String id, Ingredient ingredient, Measurement measurement, double amount) {
         this.id = id;
         this.ingredient = ingredient;
-        this.recipe = recipe;
         this.measurement = measurement;
         this.amount = amount;
     }
 
-    public RecipeIngredient(Ingredient ingredient, Recipe recipe, Measurement measurement, double amount) {
+    public RecipeIngredient(Ingredient ingredient, Measurement measurement, double amount) {
         this.ingredient = ingredient;
-        this.recipe = recipe;
         this.measurement = measurement;
+        this.amount = amount;
+    }
+
+    public RecipeIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public Measurement getMeasurement() {
+        return measurement;
+    }
+
+    public void setMeasurement(Measurement measurement) {
+        this.measurement = measurement;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -58,7 +100,7 @@ public class RecipeIngredient {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecipeIngredient that = (RecipeIngredient) o;
-        return Double.compare(that.amount, amount) == 0 && id.equals(that.id) && ingredient.equals(that.ingredient) && recipe.equals(that.recipe) && measurement == that.measurement;
+        return Double.compare(that.amount, amount) == 0 && Objects.equals(id, that.id) && Objects.equals(ingredient, that.ingredient) && Objects.equals(recipe, that.recipe) && measurement == that.measurement;
     }
 
     @Override

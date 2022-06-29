@@ -20,15 +20,13 @@ public class RecipeCategory {
     public RecipeCategory() {
     }
 
-    public RecipeCategory(int id, String category, List<Recipe> recipes) {
+    public RecipeCategory(int id, String category) {
         this.id = id;
         this.category = category;
-        this.recipes = recipes;
     }
 
-    public RecipeCategory(String category, List<Recipe> recipes) {
+    public RecipeCategory(String category) {
         this.category = category;
-        this.recipes = recipes;
     }
 
     public void addRecipe(Recipe recipe) {

@@ -19,8 +19,23 @@ public class IngredientDAOImpl implements IngredientDAO{
     public Ingredient findById(int ingredientId) { return entityManager.find(Ingredient.class, ingredientId); }
 
     @Override
-    public Collection<Ingredient> findAll() {
-        Query query = entityManager.createQuery("SELECT s FROM Ingredient s");
+    @Transactional
+    public Collection<Ingredient> findAllByIngredientName(String ingredientName) throws IllegalArgumentException{
+        if(ingredientName == null) {
+            throw new IllegalArgumentException("String firstName = " + ingredientName);
+        }
+        Query query2 = entityManager.createQuery("SELECT s FROM Ingredient s WHERE s.ingredientName = ?1");
+        query2.setParameter(1, ingredientName);
+        return query2.getResultList();
+    }
+
+    @Override
+    public Collection<Ingredient> findAllByPartOfIngredientName(String ingredientName) {
+        if(ingredientName == null) {
+            throw new IllegalArgumentException("String firstName = " + ingredientName);
+        }
+        Query query = entityManager.createQuery("SELECT s FROM Ingredient s WHERE s.ingredientName like ?1");
+        query.setParameter(1, ingredientName);
         return query.getResultList();
     }
 

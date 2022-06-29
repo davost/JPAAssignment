@@ -37,12 +37,13 @@ public class RecipeInstruction {
         this.recipeInstruction = recipeInstruction;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecipeInstruction that = (RecipeInstruction) o;
-        return id == that.id && recipeInstruction.equals(that.recipeInstruction);
+        return id == that.id && Objects.equals(recipeInstruction, that.recipeInstruction);
     }
 
     @Override

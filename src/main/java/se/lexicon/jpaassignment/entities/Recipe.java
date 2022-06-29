@@ -45,6 +45,11 @@ public class Recipe {
         this.recipeCategories = recipeCategories;
     }
 
+    public Recipe(int id, String recipeName) {
+        this.id = id;
+        this.recipeName = recipeName;
+    }
+
     public void addRecipeCategory(RecipeCategory recipeCategory) {
         recipeCategories.add(recipeCategory);
         recipeCategory.getRecipes().add(this);

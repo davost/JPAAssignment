@@ -9,7 +9,6 @@ import java.util.Collection;
 
 public class RecipeDAOImpl implements RecipeDAO {
 
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -18,8 +17,38 @@ public class RecipeDAOImpl implements RecipeDAO {
     public Recipe findById(int recipeId) { return entityManager.find(Recipe.class, recipeId); }
 
     @Override
-    public Collection<Recipe> findAll() {
+    public Collection<Recipe> findAll(String recipeName) {
         Query query = entityManager.createQuery("SELECT s FROM Recipe s");
+        return query.getResultList();
+    }
+
+    @Override
+    public Collection<Recipe> findAllByRecipeNameString(String recipeName)  throws IllegalArgumentException{
+        if(recipeName == null) {
+            throw new IllegalArgumentException("String firstName = " + recipeName);
+        }
+        Query query = entityManager.createQuery("SELECT s FROM Recipe s WHERE s.recipeName like ?1");
+        query.setParameter(1, recipeName);
+        return query.getResultList();
+        }
+
+    @Override
+    public Collection<Recipe> findAllBySpecifiedName(String recipeName)  throws IllegalArgumentException{
+        if(recipeName == null) {
+            throw new IllegalArgumentException("String firstName = " + recipeName);
+        }
+        Query query = entityManager.createQuery("SELECT s FROM Recipe s WHERE s.recipeName = ?1");
+        query.setParameter(1, recipeName);
+        return query.getResultList();
+        }
+
+    @Override
+    public Collection<Recipe> findAllByCategory(String recipeName)  throws IllegalArgumentException{
+        if(recipeName == null) {
+            throw new IllegalArgumentException("String firstName = " + recipeName);
+        }
+        Query query = entityManager.createQuery("SELECT s FROM Recipe s WHERE s.recipeName = ?1");
+        query.setParameter(1, recipeName);
         return query.getResultList();
     }
 

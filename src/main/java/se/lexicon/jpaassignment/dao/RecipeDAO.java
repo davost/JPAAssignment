@@ -7,7 +7,10 @@ import java.util.Collection;
 public interface RecipeDAO {
 
     Recipe findById(int recipeId);
-    Collection<Recipe> findAll();
+    Collection<Recipe> findAll(String recipeName);
+    Collection<Recipe> findAllByRecipeNameString(String recipeName);
+    Collection<Recipe> findAllBySpecifiedName(String recipeName);
+    Collection<Recipe> findAllByCategory(String recipeName);
     Recipe create(Recipe recipe);
     Recipe update(Recipe recipe);
     void delete(Recipe recipe);
